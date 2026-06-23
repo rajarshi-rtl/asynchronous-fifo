@@ -8,7 +8,7 @@ Implemented a parameterized Asynchronous FIFO (First-In First-Out) buffer in Ver
 
 * Parameterized FIFO depth and data width
 * Independent write and read clock domains
-* Binry/Gray-code pointer generation
+* Binary/Gray-code pointer generation
 * Dual-flop synchronizers for CDC
 * Full and Empty flag generation
 * Dual-port memory architecture

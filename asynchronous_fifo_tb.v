@@ -29,20 +29,28 @@ initial begin
 	$dumpvars(0,asynchronous_fifo_tb);
 	#5 wr_rst = 1'b1; rd_rst = 1'b1; 
 	
+	/*Writing data into the FIFO (Also checked for 
+	overflow condition simultaneously) */
 	wr_en = 1'b1;
 	#10;
 	repeat(18) @(negedge wr_clk) wr_data = wr_data + 1;
 	wr_en = 1'b0;
 
+	/* Reading data from the FIFO (Also checked for the
+	underflow condition simultaneously)*/
 	#20;
 	rd_en = 1'b1;
 	repeat(18) @ (posedge rd_clk);
 	rd_en = 1'b0;
 
+	#50;
+
+	// Simultaenous Read and Write
+	wr_en = 1'b1; rd_en = 1'b1;
+	repeat(25) @(negedge wr_clk) wr_data = wr_data + 1;	
+	wr_en = 1'b0;
+	#350 rd_en = 1'b0;
 	#20 $finish;
 end
-
-always @(posedge wr_clk) 
-	if (wr_en) $display("Time=%0t, WR_EN=%b, wptr=%b, wdata=%b",$time,wr_en,dut.wr_ptr_bin,wr_data);
 
 endmodule

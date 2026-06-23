@@ -1,3 +1,4 @@
+// Testbench for Asynchronous FIFO which is meant for reliable data transfer between two clock domains
 `timescale 1ns/1ps
 
 module asynchronous_fifo_tb();
@@ -8,6 +9,7 @@ reg [DATA_WIDTH-1:0] wr_data;
 wire [DATA_WIDTH-1:0] rd_data;
 wire empty, full;
 
+// Instantiating the design under test (DUT)
 asynchronous_fifo #(.DATA_WIDTH(DATA_WIDTH), .ADDR_WIDTH(ADDR_WIDTH)) dut (
 	.wr_clk(wr_clk), .rd_clk(rd_clk), .wr_rst(wr_rst), .rd_rst(rd_rst), .wr_en(wr_en),
 	.rd_en(rd_en), .wr_data(wr_data),
@@ -16,28 +18,28 @@ asynchronous_fifo #(.DATA_WIDTH(DATA_WIDTH), .ADDR_WIDTH(ADDR_WIDTH)) dut (
 
 integer i;
 
+// Initialization of inputs
 initial begin
 	{rd_clk,wr_clk,wr_rst,rd_rst,wr_en,rd_en} = 6'b000000;
 	wr_data = 8'h00;
 end
 
-always #5 wr_clk = ~wr_clk;
-always #10 rd_clk = ~rd_clk;
+// Applying clock inputs 
+always #5 wr_clk = ~wr_clk; // Write clock = 100MHz
+always #10 rd_clk = ~rd_clk; // Read clock = 50MHz
 
 initial begin
 	$dumpfile("wav_asynchronous_fifo.vcd");
 	$dumpvars(0,asynchronous_fifo_tb);
 	#5 wr_rst = 1'b1; rd_rst = 1'b1; 
 	
-	/*Writing data into the FIFO (Also checked for 
-	overflow condition simultaneously) */
+	//Writing data into the FIFO (Also checked for overflow condition simultaneously)
 	wr_en = 1'b1;
 	#10;
 	repeat(18) @(negedge wr_clk) wr_data = wr_data + 1;
 	wr_en = 1'b0;
 
-	/* Reading data from the FIFO (Also checked for the
-	underflow condition simultaneously)*/
+	//Reading data from the FIFO (Also checked for the underflow condition simultaneously)
 	#20;
 	rd_en = 1'b1;
 	repeat(18) @ (posedge rd_clk);
@@ -50,6 +52,7 @@ initial begin
 	repeat(25) @(negedge wr_clk) wr_data = wr_data + 1;	
 	wr_en = 1'b0;
 	#350 rd_en = 1'b0;
+	
 	#20 $finish;
 end
 

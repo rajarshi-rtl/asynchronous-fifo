@@ -4,8 +4,6 @@
 
 Implemented a parameterized Asynchronous FIFO (First-In First-Out) buffer in Verilog for reliable data transfer between independent clock domains.
 
-The design uses Gray-code pointers and dual-flop synchronizers to mitigate metastability issues associated with Clock Domain Crossing (CDC).
-
 ## Features
 
 * Parameterized FIFO depth and data width
@@ -28,21 +26,13 @@ The FIFO consists of the following modules:
 * `gray_to_binary.v` – Gray to Binary code converter
 * `fifo_mem.v` – Dual-port memory
 
-## Verification
-
-The design was verified using Icarus Verilog and GTKWave.
-
-### Test Cases Performed
+### Test Cases Performed in the testbench
 
 1. Reset functionality
-2. FIFO write operation
-3. FIFO read operation
-4. Full flag assertion
-5. Empty flag assertion
-6. Overflow protection
-7. Underflow protection
-8. Different write/read clock frequencies
-9. Simultaneous read and write operations
+2. FIFO write/read operation
+3. Full/Empty flag generation
+4. Different write/read clock domains
+5. Simultaneous read and write operations
 
 ## Tools Used
 
@@ -52,6 +42,6 @@ The design was verified using Icarus Verilog and GTKWave.
 
 ## Author
 
-Rajarshi Ray
-B.Tech Electronics and Telecommunication Engineering
+Rajarshi Ray  
+B.Tech Electronics and Telecommunication Engineering  
 IIEST Shibpur
